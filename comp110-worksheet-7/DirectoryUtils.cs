@@ -9,52 +9,96 @@ namespace comp110_worksheet_7
 {
 	public static class DirectoryUtils
 	{
-		// Return the size, in bytes, of the given file
-		public static long GetFileSize(string filePath)
-		{
-			return new FileInfo(filePath).Length;
-		}
+        // Return the total size, in bytes, of all the files below the given directory
+        public static long GetTotalSize(string directory)
+        {
+            throw new NotImplementedException();
+            long ret = 0;
+            foreach (string file in Traverse(directory, true, false))
+            {
+                ret += GetFileSize(file);
+            }
+            return ret;
+        }
 
-		// Return true if the given path points to a directory, false if it points to a file
-		public static bool IsDirectory(string path)
-		{
-			return File.GetAttributes(path).HasFlag(FileAttributes.Directory);
-		}
+        // Return the number of files (not counting directories) below the given directory
+        public static int CountFiles(string directory)
+        {
+            throw new NotImplementedException();
+            return Traverse(directory, true, false).Count;
+        }
 
-		// Return the total size, in bytes, of all the files below the given directory
-		public static long GetTotalSize(string directory)
-		{
-			throw new NotImplementedException();
-		}
+        // Return the nesting depth of the given directory. A directory containing only files (no subdirectories) has a depth of 0.
+        public static int GetDepth(string directory)
+        {
+            throw new NotImplementedException();
+            int baseLength = directory.Split('\\').Length;
+            int maxLength = 0;
 
-		// Return the number of files (not counting directories) below the given directory
-		public static int CountFiles(string directory)
-		{
-			throw new NotImplementedException();
-		}
+            foreach (string file in Traverse(directory, true, false))
+            {
+                if (file.Split('\\').Length - baseLength > maxLength)
+                {
+                    maxLength = file.Split('\\').Length - baseLength;
+                }
+            }
 
-		// Return the nesting depth of the given directory. A directory containing only files (no subdirectories) has a depth of 0.
-		public static int GetDepth(string directory)
-		{
-			throw new NotImplementedException();
-		}
+            return maxLength;
+        }
 
-		// Get the path and size (in bytes) of the smallest file below the given directory
-		public static Tuple<string, long> GetSmallestFile(string directory)
-		{
-			throw new NotImplementedException();
-		}
+        // Get the path and size (in bytes) of the smallest file below the given directory
+        public static Tuple<string, long> GetSmallestFile(string directory)
+        {
+            throw new NotImplementedException();
+            string SmallestPath = "";
+            long SmallestSize = long.MaxValue;
+            foreach (string path in Traverse(directory, true, false))
+            {
+                if (GetFileSize(path) < SmallestSize)
+                {
+                    SmallestPath = path;
+                    SmallestSize = GetFileSize(path);
+                }
+            }
 
-		// Get the path and size (in bytes) of the largest file below the given directory
-		public static Tuple<string, long> GetLargestFile(string directory)
-		{
-			throw new NotImplementedException();
-		}
+            return new Tuple<string, long>(SmallestPath, SmallestSize);
+        }
+
+        // Get the path and size (in bytes) of the largest file below the given directory
+        public static Tuple<string, long> GetLargestFile(string directory)
+        {
+            throw new NotImplementedException();
+        }
+        string LargestPath = "";
+        long LargestSize = long.MinValue;
+            foreach (string path in Traverse(directory, true, false))
+            {
+                if (GetFileSize(path) > LargestSize)
+                {
+                    LargestPath = path;
+                    LargestSize = GetFileSize(path);
+    }
+}
+
+            return new Tuple<string, long>(LargestPath, LargestSize);
+        }
 
 		// Get all files whose size is equal to the given value (in bytes) below the given directory
 		public static IEnumerable<string> GetFilesOfSize(string directory, long size)
-		{
-			throw new NotImplementedException();
-		}
+{
+    throw new NotImplementedException();
+}
+List<string> ret = new List<string>();
+
+            foreach (string path in Traverse(directory, true, false))
+            {
+                if (GetFileSize(path) == size)
+                {
+                    ret.Add(path);
+                }
+            }
+
+            return ret;
+        }
 	}
 }
